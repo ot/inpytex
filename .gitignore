@@ -1,0 +1,14 @@
+*~
+
+# Python
+*.pyc
+
+# Tex
+*.aux
+*.log
+*.out
+*.thm
+*.toc
+
+# OSX
+.DS_Store
