@@ -26,17 +26,33 @@ def checksum_autogen(lines):
     text = ' '.join(line.strip() for line in lines)
     return md5(text).hexdigest()    
 
+def usage(error=None):
+    if error is not None:
+        logging.error(error)
+
+    print 'Usage: %s <file.tex>' % sys.argv[0]
+    print 'NOTE: <file.tex> gets overwritten with the pre-processed output'
+    
+    sys.exit(1)
+
 def main(argv):
-    
     logging.basicConfig(level=logging.INFO)
-        
-    filename = argv[1]
     
+    if len(argv) != 2:
+        usage()
+    
+    filename = argv[1]
+
     in_snippet = False
     in_autogen = False
     output = []
+
+    try:
+        f = open(filename, 'rb')
+    except Exception:
+        usage('Error opening %s' % filename)        
     
-    with open(filename) as f:
+    with f:
         for idx, line in enumerate(f):
             
             line = line.strip('\n')
@@ -100,7 +116,7 @@ def main(argv):
         raise Exception('Unexpected EOF')
     
     log.debug('Writing file...')
-    with open(filename, 'w') as f:
+    with open(filename, 'wb') as f:
         print >> f, '\n'.join(output)
 
 if __name__ == '__main__':
